@@ -2,7 +2,7 @@ version: '2.1'
 services:
 
     unbound-mailcow:
-      image: mailcow/unbound:1.17
+      image: mailcow/unbound:arm64-dev
       environment:
         - TZ=${TZ}
       volumes:
@@ -58,7 +58,7 @@ services:
             - redis
 
     clamd-mailcow:
-      image: mailcow/clamd:1.61
+      image: mailcow/clamd:arm64-dev
       restart: always
       depends_on:
         - unbound-mailcow
@@ -76,7 +76,7 @@ services:
             - clamd
 
     rspamd-mailcow:
-      image: mailcow/rspamd:1.92
+      image: mailcow/rspamd:arm64-dev
       stop_grace_period: 30s
       depends_on:
         - dovecot-mailcow
@@ -106,7 +106,7 @@ services:
             - rspamd
 
     php-fpm-mailcow:
-      image: mailcow/phpfpm:1.83
+      image: mailcow/phpfpm:arm64-dev
       command: "php-fpm -d date.timezone=${TZ} -d expose_php=0"
       depends_on:
         - redis-mailcow
@@ -169,7 +169,7 @@ services:
             - phpfpm
 
     sogo-mailcow:
-      image: mailcow/sogo:1.117
+      image: mailcow/sogo:arm64-dev
       environment:
         - DBNAME=${DBNAME}
         - DBUSER=${DBUSER}
@@ -216,7 +216,7 @@ services:
             - sogo
 
     dovecot-mailcow:
-      image: mailcow/dovecot:1.23
+      image: mailcow/dovecot:arm64-dev
       depends_on:
         - mysql-mailcow
       dns:
@@ -296,7 +296,7 @@ services:
             - dovecot
 
     postfix-mailcow:
-      image: mailcow/postfix:1.68
+      image: mailcow/postfix:arm64-dev
       depends_on:
         - mysql-mailcow
       volumes:
@@ -389,7 +389,7 @@ services:
     acme-mailcow:
       depends_on:
         - nginx-mailcow
-      image: mailcow/acme:1.84
+      image: mailcow/acme:arm64-dev
       dns:
         - ${IPV4_NETWORK:-172.22.1}.254
       environment:
@@ -425,7 +425,7 @@ services:
             - acme
 
     netfilter-mailcow:
-      image: mailcow/netfilter:1.52
+      image: mailcow/netfilter:arm64-dev
       stop_grace_period: 30s
       depends_on:
         - dovecot-mailcow
@@ -448,7 +448,7 @@ services:
         - /lib/modules:/lib/modules:ro
 
     watchdog-mailcow:
-      image: mailcow/watchdog:1.97
+      image: mailcow/watchdog:arm64-dev
       dns:
         - ${IPV4_NETWORK:-172.22.1}.254
       tmpfs:
@@ -510,7 +510,7 @@ services:
             - watchdog
 
     dockerapi-mailcow:
-      image: mailcow/dockerapi:2.03
+      image: mailcow/dockerapi:arm64-dev
       security_opt:
         - label=disable
       restart: always
@@ -529,7 +529,7 @@ services:
             - dockerapi
 
     solr-mailcow:
-      image: mailcow/solr:1.8.1
+      image: mailcow/solr:dev
       restart: always
       volumes:
         - solr-vol-1:/opt/solr/server/solr/dovecot-fts/data
@@ -545,7 +545,7 @@ services:
             - solr
 
     olefy-mailcow:
-      image: mailcow/olefy:1.11
+      image: mailcow/olefy:arm64-dev
       restart: always
       environment:
         - TZ=${TZ}
